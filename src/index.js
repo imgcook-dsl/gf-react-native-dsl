@@ -1,5 +1,5 @@
-module.exports = function(schema, option) {
-  const {prettier} = option;
+module.exports = function (schema, option) {
+  const { prettier } = option;
 
   // imports
   const imports = [];
@@ -102,7 +102,7 @@ module.exports = function(schema, option) {
         return `'${value}'`;
       }
     } else if (typeof value === 'function') {
-      const {params, content} = parseFunction(value);
+      const { params, content } = parseFunction(value);
       return `(${params}) => {${content}}`;
     }
   }
@@ -110,14 +110,14 @@ module.exports = function(schema, option) {
   // parse async dataSource
   const parseDataSource = (data) => {
     const name = data.id;
-    const {uri, method, params} = data.options;
+    const { uri, method, params } = data.options;
     const action = data.type;
     let payload = {};
 
     switch (action) {
       case 'fetch':
-        if (imports.indexOf(`import {fetch} from whatwg-fetch`) === -1) {
-          imports.push(`import {fetch} from 'whatwg-fetch'`);
+        if (imports.indexOf(`import { fetch } from whatwg-fetch`) === -1) {
+          imports.push(`import { fetch } from 'whatwg-fetch'`);
         }
         payload = {
           method: method
@@ -125,7 +125,7 @@ module.exports = function(schema, option) {
 
         break;
       case 'jsonp':
-        if (imports.indexOf(`import {fetchJsonp} from fetch-jsonp`) === -1) {
+        if (imports.indexOf(`import { fetchJsonp } from fetch-jsonp`) === -1) {
           imports.push(`import jsonp from 'fetch-jsonp'`);
         }
         break;
@@ -216,23 +216,23 @@ module.exports = function(schema, option) {
       }
     })
 
-    switch(type) {
+    switch (type) {
       case 'text':
         const innerText = parseProps(schema.props.text, true);
-        xml = `<span${classString}${props}>${innerText}</span>`;
+        xml = `<Text${classString}${props}>${innerText}</Text>`;
         break;
       case 'image':
         const source = parseProps(schema.props.src);
-        xml = `<img${classString}${props} src={${source}} />`;
+        xml = `<Image${classString}${props} source={{ uri: ${source} }} />`;
         break;
       case 'div':
       case 'page':
       case 'block':
       case 'component':
         if (schema.children && schema.children.length) {
-          xml = `<div${classString}${props}>${transform(schema.children)}</div>`;
+          xml = `<View${classString}${props}>${transform(schema.children)}</View>`;
         } else {
-          xml = `<div${classString}${props} />`;
+          xml = `<View${classString}${props} />`;
         }
         break;
     }
@@ -267,7 +267,7 @@ module.exports = function(schema, option) {
         const lifeCycles = [];
         const methods = [];
         const init = [];
-        const render = [`render(){ return (`];
+        const render = [`render() { return (`];
         let classData = [`class ${schema.componentName}_${classes.length} extends Component {`];
 
         if (schema.state) {
